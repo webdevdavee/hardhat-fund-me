@@ -73,8 +73,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
           const transactionResponse = await fundMe.withdraw();
           const transactionReceipt = await transactionResponse.wait(1);
           const { gasUsed, gasPrice } = transactionReceipt;
-          //   const gasCost = BigInt(gasUsed) * BigInt(gasPrice);
-          const gasCost = gasUsed.mul(gasPrice);
+          const gasCost = BigInt(gasUsed) * BigInt(gasPrice);
 
           const endingFundMeBalance = await ethers.provider.getBalance(
             await fundMe.getAddress()
@@ -85,8 +84,8 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
           assert.equal(endingFundMeBalance, 0);
           assert.equal(
-            startingFundMeBalance.add(startingDeployerBalance).toString(),
-            endingDeployerBalance.add(gasCost).toString()
+            startingFundMeBalance + startingDeployerBalance,
+            endingDeployerBalance + gasCost
           );
         });
         // this test is overloaded. Ideally we'd split it into multiple tests
@@ -112,8 +111,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
           const transactionResponse = await fundMe.withdraw();
           const transactionReceipt = await transactionResponse.wait(1);
           const { gasUsed, gasPrice } = transactionReceipt;
-          //   const withdrawGasCost = BigInt(gasUsed) * BigInt(gasPrice);
-          const withdrawGasCost = gasUsed.mul(gasPrice);
+          const withdrawGasCost = BigInt(gasUsed) * BigInt(gasPrice);
 
           console.log(`GasCost: ${withdrawGasCost}`);
           console.log(`GasUsed: ${gasUsed}`);
@@ -128,8 +126,8 @@ const { developmentChains } = require("../../helper-hardhat-config");
 
           // Assert
           assert.equal(
-            startingFundMeBalance.add(startingDeployerBalance).toString(),
-            endingDeployerBalance.add(withdrawGasCost).toString()
+            startingFundMeBalance + startingDeployerBalance,
+            endingDeployerBalance + withdrawGasCost
           );
 
           // Make sure that the funders are reset properly
