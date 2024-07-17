@@ -70,7 +70,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
             deployer
           );
 
-          const transactionResponse = await fundMe.withdraw();
+          const transactionResponse = await fundMe.cheaperWithdraw();
           const transactionReceipt = await transactionResponse.wait(1);
           const { gasUsed, gasPrice } = transactionReceipt;
           const gasCost = BigInt(gasUsed) * BigInt(gasPrice);
@@ -108,7 +108,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
           );
 
           // Act
-          const transactionResponse = await fundMe.withdraw();
+          const transactionResponse = await fundMe.cheaperWithdraw();
           const transactionReceipt = await transactionResponse.wait(1);
           const { gasUsed, gasPrice } = transactionReceipt;
           const withdrawGasCost = BigInt(gasUsed) * BigInt(gasPrice);
@@ -144,7 +144,7 @@ const { developmentChains } = require("../../helper-hardhat-config");
           const accounts = await ethers.getSigners();
           const fundMeConnectedContract = await fundMe.connect(accounts[1]);
           await expect(
-            fundMeConnectedContract.withdraw()
+            fundMeConnectedContract.cheaperWithdraw()
           ).to.be.revertedWithCustomError(fundMe, "FundMe__NotOwner");
         });
       });
